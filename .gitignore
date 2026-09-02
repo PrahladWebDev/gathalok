@@ -1,0 +1,18 @@
+# Environment files — NEVER commit these
+backend/.env
+frontend/.env
+
+# Node modules
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# React build output (CI/CD builds this on GitHub)
+frontend/build/
+
+# PM2 logs
+backend/logs/
+
+# OS files
+.DS_Store
+Thumbs.db

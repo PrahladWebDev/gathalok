@@ -1,0 +1,329 @@
+/* GathaLok — Design System
+   Palette: Night Ink (bg), Ancient Ochre (primary), Ash White (text), Crimson (accent)
+   Typography: Cinzel (display), Lora (body), Inter (utility)
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ─── Design Tokens ──────────────────────────────────────── */
+:root {
+  --ink:        #0D0A1A;
+  --ink-2:      #161028;
+  --ink-3:      #1E1736;
+  --surface:    #231B3A;
+  --surface-2:  #2D2450;
+  --border:     rgba(183, 140, 62, 0.15);
+  --border-2:   rgba(183, 140, 62, 0.3);
+
+  --gold:       #B78C3E;
+  --gold-light: #D4A84B;
+  --gold-pale:  #E8C97A;
+  --crimson:    #8B1A1A;
+  --crimson-2:  #A52020;
+  --saffron:    #D4660A;
+
+  --ash:        #F0EAD6;
+  --ash-2:      #C8C0A8;
+  --muted:      #7A7090;
+
+  --font-display: 'Cinzel', 'Georgia', serif;
+  --font-body:    'Lora', 'Georgia', serif;
+  --font-ui:      'Inter', sans-serif;
+
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.5);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.6);
+  --shadow-gold: 0 4px 20px rgba(183,140,62,0.2);
+
+  --transition: 0.2s ease;
+  --transition-slow: 0.4s ease;
+}
+
+/* ─── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background-color: var(--ink);
+  color: var(--ash);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+a { color: var(--gold-light); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--gold-pale); }
+
+img { max-width: 100%; height: auto; display: block; }
+button { cursor: pointer; font-family: var(--font-ui); }
+input, textarea, select { font-family: var(--font-ui); }
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ink-2); }
+::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ─── Typography ─────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ash);
+  letter-spacing: 0.02em;
+}
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+h3 { font-size: clamp(1.2rem, 2.5vw, 1.75rem); }
+h4 { font-size: 1.25rem; }
+
+p { margin-bottom: 1rem; }
+p:last-child { margin-bottom: 0; }
+
+/* ─── Layout Primitives ──────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 5rem 0;
+}
+
+/* ─── Buttons ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none;
+  transition: all var(--transition);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--ink);
+  box-shadow: var(--shadow-gold);
+}
+.btn-gold:hover {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(183,140,62,0.35);
+  color: var(--ink);
+}
+
+.btn-crimson {
+  background: var(--crimson);
+  color: var(--ash);
+}
+.btn-crimson:hover { background: var(--crimson-2); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--gold-light);
+  border: 1px solid var(--border-2);
+}
+.btn-ghost:hover {
+  background: rgba(183,140,62,0.1);
+  border-color: var(--gold);
+  color: var(--gold-pale);
+}
+
+.btn-sm { padding: 0.4rem 1rem; font-size: 0.75rem; }
+.btn-lg { padding: 0.875rem 2rem; font-size: 1rem; }
+.btn-full { width: 100%; justify-content: center; }
+
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* ─── Cards ──────────────────────────────────────────────── */
+.card {
+  background: var(--ink-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-slow);
+}
+.card:hover {
+  border-color: var(--border-2);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.card-body { padding: 1.5rem; }
+
+/* ─── Forms ──────────────────────────────────────────────── */
+.form-group { margin-bottom: 1.25rem; }
+.form-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ash-2);
+  margin-bottom: 0.5rem;
+}
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  background: var(--ink-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-md);
+  color: var(--ash);
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  font-family: var(--font-body);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(183,140,62,0.15);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+.form-textarea { resize: vertical; min-height: 120px; }
+.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23B78C3E' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; cursor: pointer; }
+.form-error { font-family: var(--font-ui); font-size: 0.8rem; color: #e74c3c; margin-top: 0.375rem; }
+
+/* ─── Badge / Chip ───────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.625rem;
+  border-radius: 100px;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.badge-gold    { background: rgba(183,140,62,0.15); color: var(--gold-light); border: 1px solid var(--border-2); }
+.badge-crimson { background: rgba(139,26,26,0.2);  color: #e87070; border: 1px solid rgba(139,26,26,0.3); }
+.badge-saffron { background: rgba(212,102,10,0.15); color: #e8923a; border: 1px solid rgba(212,102,10,0.3); }
+.badge-purple  { background: rgba(74,14,143,0.2);  color: #b388ff; border: 1px solid rgba(74,14,143,0.3); }
+
+/* ─── Divider ────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-2), transparent);
+  border: none;
+  margin: 2rem 0;
+}
+
+/* ─── Section Header ─────────────────────────────────────── */
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+}
+.section-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+.section-title { margin-bottom: 0; }
+
+/* ─── Star Rating ────────────────────────────────────────── */
+.stars { display: inline-flex; gap: 2px; }
+.star { color: var(--gold); font-size: 0.875rem; }
+.star-empty { color: var(--surface-2); }
+
+/* ─── Spinner ────────────────────────────────────────────── */
+.spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 2rem auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Full-page Loading ──────────────────────────────────── */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+}
+
+/* ─── Empty State ────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--muted);
+}
+.empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+.empty-state h3 { font-family: var(--font-display); color: var(--ash-2); margin-bottom: 0.5rem; font-size: 1.25rem; }
+.empty-state p { font-size: 0.9rem; }
+
+/* ─── Prose ──────────────────────────────────────────────── */
+.prose {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  color: var(--ash-2);
+}
+.prose p + p { margin-top: 1.25rem; }
+.prose strong { color: var(--ash); font-weight: 600; }
+.prose em { color: var(--gold-pale); font-style: italic; }
+
+/* ─── Grid ───────────────────────────────────────────────── */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+
+/* ─── Responsive ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .section { padding: 3rem 0; }
+  .section-header { flex-direction: column; align-items: flex-start; }
+}
+
+/* ─── Leaflet Map overrides ──────────────────────────────── */
+.leaflet-container {
+  background: var(--ink-2) !important;
+  font-family: var(--font-ui) !important;
+}
+.leaflet-popup-content-wrapper {
+  background: var(--surface) !important;
+  color: var(--ash) !important;
+  border: 1px solid var(--border-2) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+.leaflet-popup-tip { background: var(--surface) !important; }
+.leaflet-popup-content { font-family: var(--font-ui) !important; font-size: 0.875rem !important; }
+
+/* ─── Toast overrides ────────────────────────────────────── */
+.toaster-container { font-family: var(--font-ui) !important; }

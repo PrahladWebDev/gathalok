@@ -1,0 +1,140 @@
+/* Notifications Page */
+.notifications-page { padding-top: 80px; min-height: 100vh; padding-bottom: 5rem; overflow-x: hidden; }
+
+.notif__header {
+  background: linear-gradient(135deg, var(--ink-2), var(--surface));
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 0 1.5rem;
+}
+.notif__back {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  transition: color var(--transition);
+}
+.notif__back:hover { color: var(--gold-light); }
+
+.notif__header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.notif__title-h1 { font-size: 2rem; margin: 0; overflow-wrap: break-word; word-break: break-word; }
+.notif__subtitle { font-family: var(--font-ui); font-size: 0.875rem; color: var(--muted); margin-top: 0.25rem; }
+
+.notif__filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.notif__filter-btn {
+  padding: 0.375rem 1rem;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--ash-2);
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.notif__filter-btn:hover { border-color: var(--border-2); color: var(--ash); }
+.notif__filter-btn--active {
+  background: var(--surface);
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+
+.notif__content { padding-top: 1.5rem; max-width: 720px; }
+
+.notif__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4rem 0;
+  color: var(--muted);
+}
+
+.notif__list { display: flex; flex-direction: column; gap: 0; }
+
+/* Individual notification */
+.notif__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+  cursor: pointer;
+  position: relative;
+  max-width: 100%;
+}
+.notif__item:first-child { border-top: 1px solid var(--border); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.notif__item:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.notif__item:only-child { border-radius: var(--radius-lg); }
+.notif__item:hover { background: var(--ink-2); }
+.notif__item--unread { background: rgba(183, 140, 62, 0.04); }
+.notif__item--unread:hover { background: rgba(183, 140, 62, 0.08); }
+
+.notif__icon-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+}
+.notif__type-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  border: 1px solid var(--border);
+  position: absolute;
+  top: 0; left: 0;
+}
+.notif__sender-avatar {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+  bottom: -2px; right: -4px;
+  border: 2px solid var(--ink);
+}
+.notif__sender-fallback {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 0.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: -2px; right: -4px;
+  border: 2px solid var(--ink);
+}
+
+.notif__body { flex: 1; min-width: 0; }
+.notif__title { font-family: var(--font-ui); font-size: 0.9rem; font-weight: 600; color: var(--ash); margin-bottom: 0.25rem; overflow-wrap: break-word; word-break: break-word; }
+.notif__message { font-size: 0.875rem; color: var(--ash-2); line-height: 1.5; margin-bottom: 0.375rem; overflow-wrap: break-word; word-break: break-word; }
+.notif__time { font-family: var(--font-ui); font-size: 0.75rem; color: var(--muted); }
+
+@media (max-width: 768px) {
+  .notif__item { padding: 1rem; gap: 0.75rem; }
+  .notif__header-row { flex-direction: column; align-items: flex-start; }
+}
+
+.notif__dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  margin-top: 0.375rem;
+}

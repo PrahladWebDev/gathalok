@@ -1,0 +1,145 @@
+/* Settings Page */
+.settings { padding-top: 80px; min-height: 100vh; padding-bottom: 5rem; }
+
+.settings__header {
+  background: linear-gradient(135deg, var(--ink-2), var(--surface));
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 0 1.5rem;
+}
+.settings__back {
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  transition: color var(--transition);
+}
+.settings__back:hover { color: var(--gold-light); }
+.settings__title { font-size: 2rem; margin: 0; }
+
+.settings__body { padding-top: 2rem; display: flex; gap: 2.5rem; align-items: flex-start; }
+
+/* Tabs (sidebar on desktop) */
+.settings__tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex-shrink: 0;
+  width: 180px;
+}
+.settings__tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ash-2);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: left;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+.settings__tab:hover { background: var(--surface); color: var(--ash); }
+.settings__tab--active {
+  background: var(--surface);
+  border-color: var(--border-2);
+  color: var(--gold-light);
+}
+
+/* Panel */
+.settings__panel { flex: 1; min-width: 0; }
+
+.settings__section {
+  background: var(--ink-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+.settings__section-title {
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Avatar */
+.settings__avatar-row { display: flex; align-items: center; gap: 1.5rem; }
+.settings__avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--border-2);
+  flex-shrink: 0;
+}
+.settings__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.settings__avatar-fallback {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--gold), var(--crimson));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--ink);
+}
+.settings__avatar-info { display: flex; flex-direction: column; gap: 0.5rem; }
+
+/* Form grid */
+.settings__form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.settings__input-prefix-wrap { position: relative; display: flex; align-items: center; }
+.settings__input-prefix {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: 1;
+}
+.settings__input-prefixed { padding-left: 1.75rem; }
+
+.settings__char-count {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: right;
+  margin-top: 0.25rem;
+}
+.settings__hint { font-family: var(--font-ui); font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+.settings__error { font-family: var(--font-ui); font-size: 0.8rem; color: #e87070; margin-bottom: 0.75rem; }
+
+/* Role */
+.settings__role-section {}
+.settings__role-row { display: flex; align-items: flex-start; gap: 1rem; }
+.settings__role-desc { font-size: 0.9rem; color: var(--ash-2); }
+.settings__role-desc a { color: var(--gold-light); }
+
+/* Danger */
+.settings__danger-zone { border-color: rgba(139, 26, 26, 0.3); }
+.settings__danger-title { color: #e87070; }
+.settings__danger-btn {
+  background: rgba(139, 26, 26, 0.15);
+  border: 1px solid rgba(139, 26, 26, 0.4);
+  color: #e87070;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+.settings__danger-btn:hover { background: rgba(139, 26, 26, 0.3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .settings__body { flex-direction: column; }
+  .settings__tabs { flex-direction: row; width: 100%; }
+  .settings__form-grid { grid-template-columns: 1fr; }
+}

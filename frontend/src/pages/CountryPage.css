@@ -1,0 +1,38 @@
+/* StatePage.css */
+.state-page { padding-top: 80px; min-height: 100vh; padding-bottom: 4rem; }
+
+.state-page__hero {
+  background: linear-gradient(135deg, var(--ink-2), var(--surface));
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 0 2.5rem;
+  margin-bottom: 0;
+}
+.state-page__breadcrumb {
+  font-family: var(--font-ui); font-size: 0.75rem; color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+.state-page__breadcrumb a { color: var(--muted); text-decoration: none; }
+.state-page__breadcrumb a:hover { color: var(--gold); }
+.state-page__title { font-size: 2.5rem; margin-bottom: 1.25rem; }
+.state-page__stats { display: flex; gap: 2.5rem; margin-bottom: 1.75rem; }
+.state-page__stat { display: flex; flex-direction: column; }
+.state-page__stat span:first-child { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--gold-light); line-height: 1; }
+.state-page__stat span:last-child { font-family: var(--font-ui); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 0.25rem; }
+.state-page__actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.state-page__contributors { display: flex; flex-wrap: wrap; gap: 1rem; }
+.state-page__contributor {
+  display: flex; align-items: center; gap: 0.75rem;
+  background: var(--ink-2); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 0.875rem 1.25rem;
+}
+.state-page__contrib-avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; }
+.state-page__contrib-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.state-page__contrib-fallback {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--surface-2), var(--gold));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; color: var(--ink);
+}
+.state-page__contrib-name { font-family: var(--font-ui); font-size: 0.875rem; font-weight: 600; color: var(--ash); }
+.state-page__contrib-count { font-family: var(--font-ui); font-size: 0.7rem; color: var(--muted); }

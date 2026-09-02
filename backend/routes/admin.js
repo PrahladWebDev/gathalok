@@ -1,0 +1,15 @@
+const express = require('express');
+const router = express.Router();
+const { protect, isAdmin } = require('../middleware/auth');
+const ctrl = require('../controllers/adminController');
+router.use(protect, isAdmin);
+router.get('/analytics', ctrl.getAnalytics);
+router.get('/users', ctrl.getUsers);
+router.patch('/users/:id/role', ctrl.updateUserRole);
+router.patch('/users/:id/block', ctrl.toggleUserBlock);
+router.patch('/stories/:id/feature', ctrl.featureStory);
+router.post('/broadcast', ctrl.broadcastNotification);
+router.get('/reports', ctrl.getReports);
+router.patch('/reports/:id', ctrl.updateReport);
+router.get('/country-stats', ctrl.getCountryStats);
+module.exports = router;
