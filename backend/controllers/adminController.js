@@ -174,7 +174,7 @@ exports.updateReport = async (req, res) => {
 // ─── Leaderboard ──────────────────────────────────────────
 exports.getLeaderboard = async (req, res) => {
   try {
-    const [topReaders, topContributors, topStories] = await Promise.all([
+    const [topReaders, topContributorsRaw, topStories] = await Promise.all([
       User.find({ isActive: true, isBlocked: false })
         .sort('-storiesRead')
         .limit(10)
@@ -182,12 +182,39 @@ exports.getLeaderboard = async (req, res) => {
       User.find({ role: { $in: ['contributor', 'admin'] }, isActive: true, isBlocked: false })
         .sort('-storiesWritten')
         .limit(10)
-        .select('name username avatar storiesWritten totalLikesReceived'),
+        .select('name username avatar storiesWritten'),
       Story.find({ status: 'approved' })
         .sort('-views')
         .limit(10)
         .select('title slug coverImage views averageRating country category'),
     ]);
+
+    // Compute likes received live from approved stories (excluding self-likes),
+    // so the count is correct even for likes given before counters existed.
+    const likeTotals = await Story.aggregate([
+      { $match: { status: 'approved', contributor: { $in: topContributorsRaw.map(u => u._id) } } },
+      {
+        $group: {
+          _id: '$contributor',
+          total: {
+            $sum: {
+              $size: {
+                $filter: {
+                  input: { $ifNull: ['$likes', []] },
+                  cond: { $ne: ['$$this', '$contributor'] },
+                },
+              },
+            },
+          },
+        },
+      },
+    ]);
+    const likesMap = new Map(likeTotals.map(l => [l._id.toString(), l.total]));
+    const topContributors = topContributorsRaw.map(u => ({
+      ...u.toObject(),
+      totalLikesReceived: likesMap.get(u._id.toString()) || 0,
+    }));
+
     res.json({ success: true, data: { topReaders, topContributors, topStories } });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Failed to fetch leaderboard.' });
