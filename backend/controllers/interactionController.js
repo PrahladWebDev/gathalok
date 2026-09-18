@@ -231,7 +231,7 @@ exports.toggleLikeStory = async (req, res) => {
     const isSelfLike = story.contributor.toString() === userId.toString();
     if (!isSelfLike) {
       const delta = liked ? 1 : -1;
-      await User.findByIdAndUpdate(story.contributor, { $inc: { likesReceived: delta } });
+      await User.findByIdAndUpdate(story.contributor, { $inc: { likesReceived: delta, totalLikesReceived: delta } });
       if (liked) {
         await Notification.create({
           recipient: story.contributor,
