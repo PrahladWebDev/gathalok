@@ -22,6 +22,7 @@ import Leaderboard   from './pages/Leaderboard';
 import CountryPage   from './pages/CountryPage';
 import Settings      from './pages/Settings';
 import Notifications from './pages/Notifications';
+import PublicProfile from './pages/PublicProfile';
 
 import './index.css';
 
@@ -50,6 +51,7 @@ const AppShell = () => {
           <Route path="/stories/:slug" element={<StoryDetail />} />
           <Route path="/countries/:countryName" element={<CountryPage />} />
           <Route path="/leaderboard"  element={<Leaderboard />} />
+          <Route path="/u/:username"  element={<PublicProfile />} />
 
           <Route path="/profile"      element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/bookmarks"    element={<ProtectedRoute><Profile initialTab="bookmarks" /></ProtectedRoute>} />

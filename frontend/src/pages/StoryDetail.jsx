@@ -5,6 +5,7 @@ import { fetchStory } from '../store/slices/storySlice';
 import { openAuthModal } from '../store/slices/uiSlice';
 import api from '../utils/api';
 import StoryCard from '../components/story/StoryCard';
+import FollowButton from '../components/user/FollowButton';
 import { getCategory } from '../assets/data/categories';
 import toast from 'react-hot-toast';
 import './StoryDetail.css';
@@ -342,16 +343,19 @@ const StoryDetail = () => {
             {/* Contributor */}
             {story.contributor && (
               <div className="story-detail__contributor">
-                <div className="story-detail__contributor-avatar">
-                  {story.contributor.avatar?.url
-                    ? <img src={story.contributor.avatar.url} alt={story.contributor.name} />
-                    : <div className="story-detail__contributor-fallback">{story.contributor.name?.[0]}</div>
-                  }
-                </div>
-                <div>
-                  <p className="story-detail__contributor-label">Contributed by</p>
-                  <p className="story-detail__contributor-name">{story.contributor.name}</p>
-                </div>
+                <Link to={`/u/${story.contributor.username}`} className="story-detail__contributor-link">
+                  <div className="story-detail__contributor-avatar">
+                    {story.contributor.avatar?.url
+                      ? <img src={story.contributor.avatar.url} alt={story.contributor.name} />
+                      : <div className="story-detail__contributor-fallback">{story.contributor.name?.[0]}</div>
+                    }
+                  </div>
+                  <div>
+                    <p className="story-detail__contributor-label">Contributed by</p>
+                    <p className="story-detail__contributor-name">{story.contributor.name}</p>
+                  </div>
+                </Link>
+                <FollowButton userId={story.contributor._id} />
               </div>
             )}
 

@@ -393,3 +393,6 @@
   font-size: 0.875rem;
   color: #e8923a;
 }
+.story-detail__contributor { justify-content: space-between; }
+.story-detail__contributor-link { display: flex; align-items: center; gap: 0.875rem; text-decoration: none; }
+.story-detail__contributor-link:hover .story-detail__contributor-name { color: var(--gold-light); }

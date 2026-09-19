@@ -178,7 +178,7 @@ exports.getLeaderboard = async (req, res) => {
       User.find({ isActive: true, isBlocked: false })
         .sort('-storiesRead')
         .limit(10)
-        .select('name username avatar storiesRead countriesExplored'),
+        .select('name username avatar role storiesRead countriesExplored'),
       User.find({ role: { $in: ['contributor', 'admin'] }, isActive: true, isBlocked: false })
         .sort('-storiesWritten')
         .limit(10)

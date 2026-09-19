@@ -146,6 +146,9 @@ const Profile = ({ initialTab = 'overview' }) => {
               </div>
             </div>
             <div className="profile__actions">
+              {(user.role === 'contributor' || user.role === 'admin') && (
+                <Link to={`/u/${user.username}`} className="btn btn-ghost btn-sm">View Public Profile</Link>
+              )}
               <Link to="/settings" className="btn btn-ghost btn-sm">Edit Profile</Link>
               {(user.role === 'contributor' || user.role === 'admin') && (
                 <Link to="/contribute" className="btn btn-gold btn-sm">+ New Story</Link>

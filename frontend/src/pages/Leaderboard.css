@@ -82,3 +82,6 @@
   .leaderboard__user-stats, .leaderboard__story-stats { gap: 1rem; }
   .leaderboard__item, .leaderboard__story-item { gap: 0.875rem; padding: 1rem; }
 }
+
+.leaderboard__user-link { text-decoration: none; }
+.leaderboard__user-link:hover .leaderboard__user-name { color: var(--gold-light); }

@@ -12,6 +12,7 @@ const TYPE_ICONS = {
   comment:        '💬',
   reply:          '↩️',
   like:           '♥',
+  follow:         '👤',
   achievement:    '🏆',
   feature:        '⭐',
   announcement:   '📢',

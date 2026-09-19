@@ -29,13 +29,23 @@ const readingHistorySchema = new mongoose.Schema({
 readingHistorySchema.index({ user: 1, story: 1 }, { unique: true });
 const ReadingHistory = mongoose.model('ReadingHistory', readingHistorySchema);
 
+// ─── Follow ───────────────────────────────────────────────
+const followSchema = new mongoose.Schema({
+  follower:  { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  following: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+}, { timestamps: true });
+followSchema.index({ follower: 1, following: 1 }, { unique: true });
+followSchema.index({ following: 1, createdAt: -1 });
+followSchema.index({ follower: 1, createdAt: -1 });
+const Follow = mongoose.model('Follow', followSchema);
+
 // ─── Notification ─────────────────────────────────────────
 const notificationSchema = new mongoose.Schema({
   recipient: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
   sender:    { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   type: {
     type: String,
-    enum: ['story_approved', 'story_rejected', 'story_changes', 'story_resubmitted', 'comment', 'reply', 'like', 'achievement', 'feature', 'announcement'],
+    enum: ['story_approved', 'story_rejected', 'story_changes', 'story_resubmitted', 'comment', 'reply', 'like', 'follow', 'achievement', 'feature', 'announcement'],
     required: true,
   },
   title:   { type: String, required: true },
@@ -74,4 +84,4 @@ const reportSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Report = mongoose.model('Report', reportSchema);
 
-module.exports = { Rating, Bookmark, ReadingHistory, Notification, Achievement, Report };
+module.exports = { Rating, Bookmark, ReadingHistory, Follow, Notification, Achievement, Report };

@@ -1,0 +1,2 @@
+.follow-btn { min-width: 96px; justify-content: center; }
+.follow-btn--following:hover { border-color: var(--crimson-2, #c0392b); color: #e87070; }

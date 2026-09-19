@@ -61,7 +61,13 @@ const Leaderboard = () => {
                   }
                 </div>
                 <div className="leaderboard__user-info">
-                  <p className="leaderboard__user-name">{u.name}</p>
+                  {(u.role === 'contributor' || u.role === 'admin')
+                    ? (
+                      <Link to={`/u/${u.username}`} className="leaderboard__user-link">
+                        <p className="leaderboard__user-name">{u.name}</p>
+                      </Link>
+                    )
+                    : <p className="leaderboard__user-name">{u.name}</p>}
                   <p className="leaderboard__user-handle">@{u.username}</p>
                 </div>
                 <div className="leaderboard__user-stats">
@@ -94,7 +100,13 @@ const Leaderboard = () => {
                   }
                 </div>
                 <div className="leaderboard__user-info">
-                  <p className="leaderboard__user-name">{u.name}</p>
+                  {(u.role === 'contributor' || u.role === 'admin')
+                    ? (
+                      <Link to={`/u/${u.username}`} className="leaderboard__user-link">
+                        <p className="leaderboard__user-name">{u.name}</p>
+                      </Link>
+                    )
+                    : <p className="leaderboard__user-name">{u.name}</p>}
                   <p className="leaderboard__user-handle">@{u.username}</p>
                 </div>
                 <div className="leaderboard__user-stats">
