@@ -86,9 +86,9 @@ exports.getUserStories = async (req, res) => {
 };
 
 // ─── Shared: followers / following lists ──────────────────
-const buildList = async (req, res, direction) => {
+const buildList = async (req, res, direction, forcedUser) => {
   try {
-    const user = await findActiveUserByUsername(req.params.username).select('_id');
+    const user = forcedUser || await findActiveUserByUsername(req.params.username).select('_id');
     if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
 
     const { page, limit, skip } = paging(req);
@@ -129,6 +129,9 @@ const buildList = async (req, res, direction) => {
 };
 exports.getFollowers = (req, res) => buildList(req, res, 'followers');
 exports.getFollowing = (req, res) => buildList(req, res, 'following');
+
+// ─── GET /users/me/following  (any logged-in user: who *I* follow) ───
+exports.getMyFollowing = (req, res) => buildList(req, res, 'following', { _id: req.user._id });
 
 // ─── GET /users/:id/follow-status ─────────────────────────
 exports.getFollowStatus = async (req, res) => {

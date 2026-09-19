@@ -5,14 +5,17 @@ import { getMe } from '../store/slices/authSlice';
 import { openAuthModal } from '../store/slices/uiSlice';
 import api from '../utils/api';
 import StoryCard from '../components/story/StoryCard';
+import FollowButton from '../components/user/FollowButton';
 import { getCategory } from '../assets/data/categories';
 import './Profile.css';
+import './PublicProfile.css'; // shared follower-list row styles
 
 const TABS = [
   { id: 'overview',    label: '👤 Overview' },
   { id: 'bookmarks',   label: '🔖 Bookmarks' },
   { id: 'history',     label: '📜 History' },
   { id: 'contributions', label: '✍️ Contributions' },
+  { id: 'following',    label: '👥 Following' },
   { id: 'achievements', label: '🏆 Achievements' },
 ];
 
@@ -29,6 +32,7 @@ const Profile = ({ initialTab = 'overview' }) => {
   const [history, setHistory] = useState([]);
   const [contributions, setContributions] = useState([]);
   const [allAchievements, setAllAchievements] = useState([]);
+  const [following, setFollowing] = useState({ items: [], page: 0, pages: 1, loaded: false });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => { if (user) dispatch(getMe()); }, [dispatch]);
@@ -50,6 +54,12 @@ const Profile = ({ initialTab = 'overview' }) => {
       setLoading(true);
       api.get('/stories', { params: { contributor: user._id, status: 'all', limit: 20 } })
         .then(r => setContributions(r.data.data)).catch(() => {}).finally(() => setLoading(false));
+    }
+    if (tab === 'following' && !following.loaded) {
+      setLoading(true);
+      api.get('/users/me/following', { params: { page: 1, limit: 20 } })
+        .then(r => setFollowing({ items: r.data.data, page: r.data.pagination.page, pages: r.data.pagination.pages, loaded: true }))
+        .catch(() => {}).finally(() => setLoading(false));
     }
     if (tab === 'achievements' && !allAchievements.length) {
       api.get('/achievements').then(r => setAllAchievements(r.data.data)).catch(() => {});
@@ -436,6 +446,57 @@ const Profile = ({ initialTab = 'overview' }) => {
                 </div>
               )
             }
+          </div>
+        )}
+
+        {/* ── Following ─────────────────────────────────── */}
+        {tab === 'following' && (
+          <div>
+            {loading && !following.loaded ? (
+              <div className="loading-screen" style={{ minHeight: 160 }}><div className="spinner" /></div>
+            ) : following.items.length === 0 ? (
+              <div className="empty-state">
+                <div className="icon">👥</div>
+                <h3>You're not following anyone yet</h3>
+                <p>Follow contributors from a story page or the leaderboard to see them here.</p>
+                <Link to="/leaderboard" className="btn btn-gold" style={{ margin: '1.5rem auto 0', display: 'inline-flex' }}>Browse Contributors</Link>
+              </div>
+            ) : (
+              <>
+                <div className="pub-users">
+                  {following.items.map(u => (
+                    <div className="pub-user" key={u._id}>
+                      <Link to={`/u/${u.username}`} className="pub-user__link">
+                        <div className="pub-user__avatar">
+                          {u.avatar?.url
+                            ? <img src={u.avatar.url} alt={u.name} />
+                            : <div className="pub-user__avatar-fallback">{u.name?.[0]?.toUpperCase()}</div>}
+                        </div>
+                        <div className="pub-user__info">
+                          <p className="pub-user__name">
+                            {u.name}
+                            <span className="pub-badge">{u.role === 'admin' ? 'Admin' : 'Contributor'}</span>
+                          </p>
+                          <p className="pub-user__handle">@{u.username}</p>
+                          {u.bio && <p className="pub-user__bio">{u.bio}</p>}
+                        </div>
+                      </Link>
+                      <FollowButton userId={u._id} initialFollowing={u.isFollowing} />
+                    </div>
+                  ))}
+                </div>
+                {following.page < following.pages && (
+                  <div style={{ textAlign: 'center', margin: '2rem 0' }}>
+                    <button className="btn btn-ghost" onClick={async () => {
+                      try {
+                        const r = await api.get('/users/me/following', { params: { page: following.page + 1, limit: 20 } });
+                        setFollowing(f => ({ ...f, items: [...f.items, ...r.data.data], page: r.data.pagination.page, pages: r.data.pagination.pages }));
+                      } catch {}
+                    }}>Load more</button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         )}
 

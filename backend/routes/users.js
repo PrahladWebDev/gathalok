@@ -7,6 +7,7 @@ const ctrl = require('../controllers/userController');
 // Own reading data (must stay above the /:username wildcard)
 router.get('/reading-history', protect, getReadingHistory);
 router.patch('/reading-progress/:storyId', protect, updateReadingProgress);
+router.get('/me/following', protect, ctrl.getMyFollowing);
 
 // Follow / unfollow (by user id)
 router.get('/:id/follow-status', protect, ctrl.getFollowStatus);
