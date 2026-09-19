@@ -92,7 +92,6 @@ const PublicProfileInner = ({ username }) => {
     if (!profile) return;
     const l = lists[tab];
     if (l.page === 0 && !l.loading) loadMore(tab);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, profile]);
 
   const handleProfileFollow = (isFollowing, followersCount) => {
