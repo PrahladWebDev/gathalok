@@ -11,7 +11,7 @@ export const register = createAsyncThunk('auth/register', async (data, { rejectW
     const res = await api.post('/auth/register', data);
     return res.data;
   } catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Registration failed');
+    return rejectWithValue({ message: err.response?.data?.message || 'Registration failed' });
   }
 });
 
@@ -20,7 +20,47 @@ export const login = createAsyncThunk('auth/login', async (data, { rejectWithVal
     const res = await api.post('/auth/login', data);
     return res.data;
   } catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Login failed');
+    return rejectWithValue({
+      message: err.response?.data?.message || 'Login failed',
+      notVerified: !!err.response?.data?.notVerified,
+      email: err.response?.data?.email,
+    });
+  }
+});
+
+export const verifyEmail = createAsyncThunk('auth/verifyEmail', async (token, { rejectWithValue }) => {
+  try {
+    const res = await api.get(`/auth/verify-email/${token}`);
+    return res.data;
+  } catch (err) {
+    return rejectWithValue({ message: err.response?.data?.message || 'Verification failed' });
+  }
+});
+
+export const resendVerification = createAsyncThunk('auth/resendVerification', async (email, { rejectWithValue }) => {
+  try {
+    const res = await api.post('/auth/resend-verification', { email });
+    return res.data;
+  } catch (err) {
+    return rejectWithValue({ message: err.response?.data?.message || 'Failed to resend verification email' });
+  }
+});
+
+export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (email, { rejectWithValue }) => {
+  try {
+    const res = await api.post('/auth/forgot-password', { email });
+    return res.data;
+  } catch (err) {
+    return rejectWithValue({ message: err.response?.data?.message || 'Failed to send reset email' });
+  }
+});
+
+export const resetPassword = createAsyncThunk('auth/resetPassword', async ({ token, password }, { rejectWithValue }) => {
+  try {
+    const res = await api.post(`/auth/reset-password/${token}`, { password });
+    return res.data;
+  } catch (err) {
+    return rejectWithValue({ message: err.response?.data?.message || 'Password reset failed' });
   }
 });
 
@@ -59,6 +99,8 @@ const authSlice = createSlice({
     token: initialToken,
     loading: false,
     error: null,
+    // Set after register()/resendVerification() to the email awaiting verification.
+    pendingVerificationEmail: null,
   },
   reducers: {
     logout: (state) => {
@@ -68,6 +110,7 @@ const authSlice = createSlice({
       localStorage.removeItem('gathalok_token');
     },
     clearError: (state) => { state.error = null; },
+    clearPendingVerification: (state) => { state.pendingVerificationEmail = null; },
   },
   extraReducers: (builder) => {
     const pending = (state) => { state.loading = true; state.error = null; };
@@ -77,17 +120,51 @@ const authSlice = createSlice({
       state.loading = false;
       state.user = action.payload.user;
       state.token = action.payload.token;
+      state.pendingVerificationEmail = null;
       localStorage.setItem('gathalok_user', JSON.stringify(action.payload.user));
       localStorage.setItem('gathalok_token', action.payload.token);
     };
 
     builder
       .addCase(register.pending, pending)
-      .addCase(register.fulfilled, handleSuccess)
+      .addCase(register.fulfilled, (state, action) => {
+        state.loading = false;
+        state.pendingVerificationEmail = action.payload.email || null;
+      })
       .addCase(register.rejected, rejected)
+
       .addCase(login.pending, pending)
       .addCase(login.fulfilled, handleSuccess)
-      .addCase(login.rejected, rejected)
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        if (action.payload?.notVerified) state.pendingVerificationEmail = action.payload.email || null;
+      })
+
+      .addCase(verifyEmail.pending, pending)
+      .addCase(verifyEmail.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload.token) {
+          state.user = action.payload.user;
+          state.token = action.payload.token;
+          localStorage.setItem('gathalok_user', JSON.stringify(action.payload.user));
+          localStorage.setItem('gathalok_token', action.payload.token);
+        }
+      })
+      .addCase(verifyEmail.rejected, rejected)
+
+      .addCase(resendVerification.pending, pending)
+      .addCase(resendVerification.fulfilled, (state) => { state.loading = false; })
+      .addCase(resendVerification.rejected, rejected)
+
+      .addCase(forgotPassword.pending, pending)
+      .addCase(forgotPassword.fulfilled, (state) => { state.loading = false; })
+      .addCase(forgotPassword.rejected, rejected)
+
+      .addCase(resetPassword.pending, pending)
+      .addCase(resetPassword.fulfilled, handleSuccess)
+      .addCase(resetPassword.rejected, rejected)
+
       .addCase(getMe.fulfilled, (state, action) => {
         state.user = action.payload.user;
         localStorage.setItem('gathalok_user', JSON.stringify(action.payload.user));
@@ -106,5 +183,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, clearError } = authSlice.actions;
+export const { logout, clearError, clearPendingVerification } = authSlice.actions;
 export default authSlice.reducer;

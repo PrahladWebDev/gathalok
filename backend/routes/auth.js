@@ -6,6 +6,10 @@ const ctrl = require('../controllers/authController');
 
 router.post('/register', ctrl.register);
 router.post('/login', ctrl.login);
+router.get('/verify-email/:token', ctrl.verifyEmail);
+router.post('/resend-verification', ctrl.resendVerification);
+router.post('/forgot-password', ctrl.forgotPassword);
+router.post('/reset-password/:token', ctrl.resetPassword);
 router.get('/me', protect, ctrl.getMe);
 router.put('/profile', protect, ctrl.updateProfile);
 router.patch('/me', protect, ctrl.updateProfile);         // alias for Settings

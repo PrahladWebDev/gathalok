@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -63,6 +64,11 @@ const userSchema = new mongoose.Schema({
   isActive:  { type: Boolean, default: true },
   isBlocked: { type: Boolean, default: false },
 
+  // ─── Email verification ─────────────────────────────────
+  isVerified: { type: Boolean, default: false },
+  verificationToken: String,
+  verificationExpire: Date,
+
   lastLogin: { type: Date },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
@@ -86,6 +92,24 @@ userSchema.methods.getSignedToken = function () {
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRE || '30d' }
   );
+};
+
+// ─── Email verification token ─────────────────────────────
+// Returns the RAW token (goes in the email link). Only the SHA-256 hash
+// of it is stored on the user, same pattern as the password reset token.
+userSchema.methods.getVerificationToken = function () {
+  const rawToken = crypto.randomBytes(32).toString('hex');
+  this.verificationToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+  this.verificationExpire = Date.now() + 24 * 60 * 60 * 1000; // 24h
+  return rawToken;
+};
+
+// ─── Password reset token ─────────────────────────────────
+userSchema.methods.getResetPasswordToken = function () {
+  const rawToken = crypto.randomBytes(32).toString('hex');
+  this.resetPasswordToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+  this.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1h
+  return rawToken;
 };
 
 // ─── Virtual: avatar fallback ─────────────────────────────
