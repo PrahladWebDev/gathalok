@@ -10,8 +10,20 @@ const app = express();
 
 // ─── Security Middleware ──────────────────────────────────
 app.use(helmet());
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:3000',
+  'http://localhost:5173',        // Electron dev mode
+  'https://gathalok.prahladsingh.in',
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    if (!origin || origin === 'null' || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
 
