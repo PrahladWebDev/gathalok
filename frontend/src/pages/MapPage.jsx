@@ -184,10 +184,10 @@ const MapPage = () => {
             maxBoundsViscosity={1.0}
           >
             {/* Dark tile layer — CartoDB Dark Matter */}
-            <TileLayer
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
-            />
+         <TileLayer
+  url="https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png?key=cb1_4coh_1_1f152ddab1485a313e223d4b"
+  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+/>
 
             {/* Country polygons */}
             {worldGeoJSON && (
