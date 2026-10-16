@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import store from './store';
@@ -37,12 +37,25 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
+// ─── Scroll to top on navigation ──────────────────────────
+// React Router keeps the old scroll position when the route changes, so
+// clicking a category/country far down the Home page opened /explore
+// already scrolled to the bottom. Reset whenever the page (pathname) changes.
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
+  return null;
+};
+
 // ─── App Shell ────────────────────────────────────────────
 const AppShell = () => {
   const { authModal } = useSelector(s => s.ui);
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Navbar />
       {authModal && <AuthModal />}
 
