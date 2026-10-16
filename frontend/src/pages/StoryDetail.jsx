@@ -6,6 +6,7 @@ import { openAuthModal } from '../store/slices/uiSlice';
 import api from '../utils/api';
 import StoryCard from '../components/story/StoryCard';
 import FollowButton from '../components/user/FollowButton';
+import ListenBar from '../components/story/ListenBar';
 import { getCategory } from '../assets/data/categories';
 import toast from 'react-hot-toast';
 import './StoryDetail.css';
@@ -363,6 +364,18 @@ const StoryDetail = () => {
             <blockquote className="story-detail__blockquote">
               {story.shortDescription}
             </blockquote>
+
+            {/* Listen (logged-in users; guests see it locked) */}
+            <ListenBar
+              title={story.title}
+              parts={[
+                story.fullStory,
+                story.origin ? `Historical origin.\n\n${story.origin}` : '',
+                story.significance ? `Cultural significance.\n\n${story.significance}` : '',
+              ]}
+              locked={!user}
+              onLockedClick={() => dispatch(openAuthModal('login'))}
+            />
 
             {/* Full Story */}
             <div className="story-detail__section">

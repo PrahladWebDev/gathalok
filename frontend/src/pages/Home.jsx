@@ -6,18 +6,12 @@ import { openAuthModal } from '../store/slices/uiSlice';
 import StoryCard from '../components/story/StoryCard';
 import api from '../utils/api';
 import { CATEGORIES } from '../assets/data/categories';
+import { COUNTRIES } from '../assets/data/countries';
+import { getRealmImage, getCategoryImage } from '../assets/data/localImages';
 import heroBanner from "../assets/data/hero.png";
 import './Home.css';
 
 /* ─── Static data ─────────────────────────────────────────── */
-const COUNTRIES_SECTION = [
-  { name: 'India',    emoji: '🇮🇳', stories: '84', color: '#8B1A1A' },
-  { name: 'Mexico',   emoji: '🌵', stories: '61', color: '#1A5276' },
-  { name: 'Ireland',  emoji: '☘️', stories: '53', color: '#117A65' },
-  { name: 'Japan',    emoji: '🎎', stories: '38', color: '#5D4E37' },
-  { name: 'Egypt',    emoji: '🐫', stories: '47', color: '#4A0E8F' },
-  { name: 'Greece',   emoji: '🏛️', stories: '55', color: '#C17900' },
-];
 
 const VOICES = [
   { quote: 'My grandmother told me the same story about the weeping woman near our well. Finding it here made me weep too.', name: 'Priya R.', loc: 'Jaipur, India' },
@@ -131,6 +125,7 @@ const Home = () => {
   const [carouselIdx, setCarouselIdx] = useState(0);
   const statsRef = useRef();
   const [statsVisible, setStatsVisible] = useState(false);
+  const [countryCounts, setCountryCounts] = useState({});
 
   const storiesCount = useCounter(statsVisible ? 500 : 0, 1600);
   const countriesCount = useCounter(statsVisible ? 20 : 0, 1000);
@@ -144,6 +139,15 @@ const Home = () => {
     const t = setTimeout(() => setHeroLoaded(true), 100);
     return () => clearTimeout(t);
   }, [dispatch]);
+
+  // Real tale counts for the country cards (cards still show without them)
+  useEffect(() => {
+    api.get('/countries/stats').then(r => {
+      const map = {};
+      (r.data.data || []).forEach(c => { map[c._id] = c.storyCount; });
+      setCountryCounts(map);
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     const el = statsRef.current;
@@ -289,42 +293,43 @@ const Home = () => {
         </div>
         <div className="lp-states__scroll-wrap">
           <div className="lp-states__track">
-            {COUNTRIES_SECTION.map(country => (
-              <Link
-                key={country.name}
-                to={`/countries/${encodeURIComponent(country.name)}`}
-                className="lp-state-card"
-                style={{ '--state-color': country.color }}
-              >
-                <div className="lp-state-card__glow" />
-                <span className="lp-state-card__emoji">{country.emoji}</span>
-                <span className="lp-state-card__name">{country.name}</span>
-                <span className="lp-state-card__count">{country.stories} tales</span>
-                <span className="lp-state-card__arrow">→</span>
-              </Link>
-            ))}
-            {COUNTRIES_SECTION.map(country => (
-              <Link
-                key={`${country.name}-2`}
-                to={`/countries/${encodeURIComponent(country.name)}`}
-                className="lp-state-card"
-                style={{ '--state-color': country.color }}
-                aria-hidden="true"
-                tabIndex={-1}
-              >
-                <div className="lp-state-card__glow" />
-                <span className="lp-state-card__emoji">{country.emoji}</span>
-                <span className="lp-state-card__name">{country.name}</span>
-                <span className="lp-state-card__count">{country.stories} tales</span>
-                <span className="lp-state-card__arrow">→</span>
-              </Link>
-            ))}
+            {[0, 1].map(copy => COUNTRIES.map(country => {
+              const photo = getRealmImage(country.name);
+              const count = countryCounts[country.name];
+              return (
+                <Link
+                  key={`${country.name}-${copy}`}
+                  to={`/countries/${encodeURIComponent(country.name)}`}
+                  className="lp-state-card"
+                  aria-hidden={copy === 1 ? 'true' : undefined}
+                  tabIndex={copy === 1 ? -1 : undefined}
+                >
+                  {photo && <img className="lp-state-card__img" src={photo} alt="" loading="lazy" draggable="false" />}
+                  <div className="lp-state-card__shade" />
+                  {count !== undefined && (
+                    <span className="lp-state-card__count">{count ? `${count} ${count === 1 ? 'tale' : 'tales'}` : 'No tales yet'}</span>
+                  )}
+                  <span className="lp-state-card__bottom">
+                    <img
+                      className="lp-state-card__flag"
+                      src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                      alt=""
+                      width="26"
+                      height="19"
+                      onError={e => { e.currentTarget.style.display = 'none'; }}
+                    />
+                    <span className="lp-state-card__name">{country.name}</span>
+                  </span>
+                  <span className="lp-state-card__arrow">→</span>
+                </Link>
+              );
+            }))}
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════
-          CATEGORIES — 8-up icon grid with colour-wash hover
+          CATEGORIES — big round pictures with a coloured glow
       ══════════════════════════════════════════════════════ */}
       <section className="lp-section lp-categories">
         <div className="container">
@@ -333,19 +338,24 @@ const Home = () => {
             <h2 className="lp-section__title">Browse by Category</h2>
           </header>
           <div className="lp-cat-grid">
-            {CATEGORIES.map(cat => (
-              <Link
-                key={cat.slug}
-                to={`/explore?category=${cat.slug}`}
-                className="lp-cat-card"
-                style={{ '--cat': cat.color }}
-              >
-                <div className="lp-cat-card__fill" />
-                <span className="lp-cat-card__icon">{cat.icon}</span>
-                <span className="lp-cat-card__name">{cat.name}</span>
-                <span className="lp-cat-card__chevron">↗</span>
-              </Link>
-            ))}
+            {CATEGORIES.map(cat => {
+              const photo = getCategoryImage(cat.slug);
+              return (
+                <Link
+                  key={cat.slug}
+                  to={`/explore?category=${cat.slug}`}
+                  className="lp-cat-card"
+                  style={{ '--cat': cat.color }}
+                >
+                  <span className="lp-cat-card__circle">
+                    {photo
+                      ? <img src={photo} alt="" loading="lazy" draggable="false" />
+                      : <span className="lp-cat-card__icon">{cat.icon}</span>}
+                  </span>
+                  <span className="lp-cat-card__name">{cat.name}</span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

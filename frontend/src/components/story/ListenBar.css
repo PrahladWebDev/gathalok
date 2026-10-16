@@ -1,0 +1,90 @@
+.listen-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  margin: 0 0 2rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-ui);
+  color: var(--ash);
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.listen-bar__btn {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition), filter var(--transition);
+}
+.listen-bar__btn:hover { transform: scale(1.06); filter: brightness(1.08); }
+.listen-bar__btn:focus-visible,
+.listen-bar__speed:focus-visible { outline: 2px solid var(--gold-pale); outline-offset: 2px; }
+
+.listen-bar__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.listen-bar__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ash);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.listen-bar__sub { font-size: 0.75rem; color: var(--muted); }
+
+.listen-bar__track {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-2);
+  overflow: hidden;
+}
+.listen-bar__fill {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+
+.listen-bar__speed {
+  flex-shrink: 0;
+  min-width: 48px;
+  height: 32px;
+  padding: 0 0.6rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-2);
+  background: transparent;
+  color: var(--ash-2);
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color var(--transition), color var(--transition);
+}
+.listen-bar__speed:hover { border-color: var(--gold); color: var(--gold-pale); }
+
+/* Guest (locked) state */
+.listen-bar--locked { cursor: pointer; }
+.listen-bar--locked:hover { border-color: var(--gold); }
+.listen-bar__btn--locked { opacity: 0.6; font-size: 1.1rem; }
+.listen-bar--locked .listen-bar__text { gap: 0.15rem; }
+.listen-bar__chevron { flex-shrink: 0; color: var(--gold); font-size: 1.1rem; }
