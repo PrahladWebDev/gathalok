@@ -7,6 +7,7 @@ import api from '../utils/api';
 import StoryCard from '../components/story/StoryCard';
 import FollowButton from '../components/user/FollowButton';
 import ListenBar from '../components/story/ListenBar';
+import { StoryContent, stripStoryMarkup } from '../components/story/StoryEditor';
 import { getCategory } from '../assets/data/categories';
 import toast from 'react-hot-toast';
 import './StoryDetail.css';
@@ -369,7 +370,7 @@ const StoryDetail = () => {
             <ListenBar
               title={story.title}
               parts={[
-                story.fullStory,
+                stripStoryMarkup(story.fullStory),
                 story.origin ? `Historical origin.\n\n${story.origin}` : '',
                 story.significance ? `Cultural significance.\n\n${story.significance}` : '',
               ]}
@@ -380,11 +381,7 @@ const StoryDetail = () => {
             {/* Full Story */}
             <div className="story-detail__section">
               <h2 className="story-detail__section-title">The Legend</h2>
-              <div className="prose">
-                {story.fullStory?.split('\n\n').map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-              </div>
+              <StoryContent text={story.fullStory} />
             </div>
 
             {/* Origin */}

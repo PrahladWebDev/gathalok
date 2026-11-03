@@ -7,6 +7,7 @@ import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { COUNTRIES } from '../assets/data/countries';
 import { CATEGORIES } from '../assets/data/categories';
+import StoryEditor, { stripStoryMarkup } from '../components/story/StoryEditor';
 import './Contribute.css';
 
 const STEPS = ['Basic Info', 'The Story', 'Media & Tags', 'Review'];
@@ -114,7 +115,7 @@ const Contribute = () => {
 
   const canProceed = () => {
     if (step === 0) return form.title && form.country && form.category;
-    if (step === 1) return form.shortDescription && form.fullStory?.length >= 100;
+    if (step === 1) return form.shortDescription && stripStoryMarkup(form.fullStory || '').length >= 100;
     return true;
   };
 
@@ -202,10 +203,7 @@ const Contribute = () => {
 
               <div className="form-group">
                 <label className="form-label">Full Story * <span className="form-hint">(min 100 chars)</span></label>
-                <textarea className="form-textarea contribute__fullstory" name="fullStory"
-                  value={form.fullStory} onChange={handle} rows={16}
-                  placeholder="Write the complete legend here. Use double line breaks for paragraphs. Include dialogue, historical context, the supernatural elements, and why it matters. The more vivid and detailed, the better…" />
-                <p className="form-hint-count">{form.fullStory.length} characters</p>
+                <StoryEditor value={form.fullStory} onChange={(v) => setForm(p => ({ ...p, fullStory: v }))} />
               </div>
 
               <div className="form-group">
@@ -279,7 +277,7 @@ const Contribute = () => {
                 </div>
                 <div className="contribute__review-item">
                   <span className="contribute__review-label">Story Length</span>
-                  <span className="contribute__review-value">{form.fullStory.length} characters</span>
+                  <span className="contribute__review-value">{stripStoryMarkup(form.fullStory).length} characters</span>
                 </div>
                 <div className="contribute__review-item">
                   <span className="contribute__review-label">Cover Image</span>
