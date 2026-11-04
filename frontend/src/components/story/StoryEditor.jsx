@@ -89,7 +89,8 @@ const figHtml = (img) =>
   `style="${img.align === 'full' ? '' : `width:${img.width}%`}">` +
   `<span class="se-box"><img src="${esc(img.url)}" alt="" draggable="false"/>` +
   `<span class="se-h se-h--move" data-h="move" title="Drag to move">✥</span>` +
-  `<span class="se-h se-h--size" data-h="size" title="Drag to resize"></span></span>` +
+  `<span class="se-h se-h--size" data-h="size" title="Drag to resize"></span>` +
+  `<span class="se-h se-h--del" data-h="del" title="Remove this image">✕</span></span>` +
   `<figcaption>${esc(img.caption)}</figcaption></figure>`;
 
 const stringToHtml = (value) => {
@@ -396,7 +397,15 @@ const StoryEditor = ({ value, onChange }) => {
     const h = e.target.closest?.('[data-h]');
     if (!fig || !h) return;
     e.preventDefault();
+    if (h.dataset.h === 'del') { fig.remove(); setSelectedId(null); emit(); return; }
     if (h.dataset.h === 'size') startResize(e, fig); else startMove(fig);
+  };
+
+  const onKeyDown = (e) => {
+    if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) {
+      const fig = rootRef.current.querySelector(`figure[data-id="${selectedId}"]`);
+      if (fig) { e.preventDefault(); fig.remove(); setSelectedId(null); emit(); }
+    }
   };
 
   const onPaste = (e) => {
@@ -461,6 +470,7 @@ const StoryEditor = ({ value, onChange }) => {
           onInput={emit}
           onPointerDown={onPointerDown}
           onPaste={onPaste}
+          onKeyDown={onKeyDown}
           onDrop={onDrop}
           onDragOver={(e) => e.dataTransfer?.types?.includes('Files') && e.preventDefault()}
         />
@@ -496,7 +506,7 @@ const StoryEditor = ({ value, onChange }) => {
 
       <p className="se__hint">
         Click an image to select it · drag <b>✥</b> to move it (drop on the left / middle / right of the text to wrap it that side) ·
-        drag the <b>corner dot</b> to stretch or shrink. The text re-flows around it automatically.
+        drag the <b>corner dot</b> to stretch or shrink · press <b>✕</b> (or Delete) to remove it. The text re-flows around it automatically.
       </p>
       <p className="form-hint-count se__count">{stripStoryMarkup(value || '').length} characters</p>
     </div>
